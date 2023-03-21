@@ -29,6 +29,12 @@ inputs:
 -rw-r--r--. 1 watada ftp  3048 Mar 17 22:14 solid_rk.in_tsunami_4km
 -rw-r--r--. 1 watada ftp    43 Jan  7  1996 test_read_solid.in
 
+total 180
+-rw-r--r--. 1 watada ftp   3510 Mar 19 19:57 mode.dat
+-rw-r--r--. 1 watada ftp   6077 Mar 20 18:06 mode.dat_tsunami_4km
+-rw-r--r--. 1 watada ftp 119857 Mar 19 19:57 solid_rk.out
+-rw-r--r--. 1 watada ftp  46015 Mar 20 18:06 solid_rk.out_tsunami_4km
+
 models:
 total 56
 -rw-r--r--. 1 watada ftp 26440 Jan  7  1996 prem
