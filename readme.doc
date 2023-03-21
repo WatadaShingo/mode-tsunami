@@ -1,0 +1,414 @@
+Documentation of programs for spheroidal normal mode computation
+including tsunami
+
+Contents
+
+1. What are in this directory??
+2. Earth model expression
+3. Compilation and linking programs
+4. How to use of the normal mode computation program 'solid_rk.c'
+5. How to use of the utility program for normal mode computations 
+'test_read_solid.c'
+6. How to compute the tsunami dispersion table
+
+1. What are in this directory??
+	This file (readme.doc) describes how to use spheroidal
+	normal mode programs for an 1D Earth model. In part 2 to 6,
+	the input and output files for the normal mode programs are
+	explained.
+	
+	Under this directory and its subdirectory there are
+	following files.
+
+
+-rw-r--r--. 1 watada ftp 15272 Mar 19 23:02 readme.doc
+-rw-r--r--. 1 watada ftp   626 Mar 17 12:39 run.sh
+
+inputs:
+-rw-r--r--. 1 watada ftp  2075 Mar 18 20:55 solid_rk.in
+-rw-r--r--. 1 watada ftp  3048 Mar 17 22:14 solid_rk.in_tsunami_4km
+-rw-r--r--. 1 watada ftp    43 Jan  7  1996 test_read_solid.in
+
+models:
+total 56
+-rw-r--r--. 1 watada ftp 26440 Jan  7  1996 prem
+-rw-r--r--. 1 watada ftp 27738 Mar 15 22:16 prem_vp_rho_stratified_4km
+
+programs:
+total 764
+-rw-r--r--. 1 watada ftp  20160 Dec 11  2010 calc_a.c
+-rw-r--r--. 1 watada ftp  37526 Jan  7  1996 calc_a.earth.c
+-rw-r--r--. 1 watada ftp   1376 Jan  7  1996 calc_a.earth.h
+-rw-r--r--. 1 watada ftp    909 Jan  7  1996 calc_a.h
+drwxr-xr-x. 2 watada ftp   4096 May 16  2007 change_core
+-rw-r--r--. 1 watada ftp    325 Jan  7  1996 earthconst.h
+-rw-r--r--. 1 watada ftp   9118 Sep 27  2011 eigen.c
+-rw-r--r--. 1 watada ftp    970 Jan  7  1996 eigen.h
+-rw-r--r--. 1 watada ftp    980 Jan  7  1996 m_atmos.h
+-rw-r--r--. 1 watada ftp   1274 Jan  7  1996 m_solid.h
+-rw-r--r--. 1 watada ftp    594 Dec 11  2010 makefile
+-rw-r--r--. 1 watada ftp  12765 Jan  7  1996 model.c
+-rw-r--r--. 1 watada ftp    298 Jan  7  1996 model.h
+-rw-r--r--. 1 watada ftp   3333 Jan  7  1996 ray_sub.c
+-rw-r--r--. 1 watada ftp     88 Jan  7  1996 ray_sub.h
+-rw-r--r--. 1 watada ftp   5651 Jan  7  1996 read_atmos.c
+-rw-r--r--. 1 watada ftp    197 Jan  7  1996 read_atmos.h
+-rw-r--r--. 1 watada ftp  12453 Jan  7  1996 read_solid.c
+-rw-r--r--. 1 watada ftp    278 Jan  7  1996 read_solid.h
+-rw-r--r--. 1 watada ftp  25927 Dec 11  2010 rk.c
+-rw-r--r--. 1 watada ftp    234 Dec 11  2010 rk.h
+-rw-r--r--. 1 watada ftp  11512 Jan  7  1996 search.c
+-rw-r--r--. 1 watada ftp    702 Jan  7  1996 search.h
+-rwxr-xr-x. 1 watada ftp 157893 Dec  3  2011 solid_rk
+-rw-r--r--. 1 watada ftp  38147 Dec  3  2011 solid_rk.c
+-rw-r--r--. 1 watada ftp  18054 Jan  7  1996 solid_sub.c
+-rw-r--r--. 1 watada ftp    359 Jan  7  1996 solid_sub.h
+-rwxr-xr-x. 1 watada ftp 106905 Dec  2  2011 test_read_solid
+-rw-r--r--. 1 watada ftp   6976 Sep 17  2011 test_read_solid.c
+
+programs/lib:
+
+total 128
+-rw-r--r--. 1 watada ftp   142 Jan  7  1996 bess.h
+-rw-r--r--. 1 watada ftp  2415 Jan  7  1996 clear.c
+-rw-r--r--. 1 watada ftp   346 Jan  7  1996 clear.h
+-rw-r--r--. 1 watada ftp  3517 Jan  7  1996 clib.c
+-rw-r--r--. 1 watada ftp   523 Jan  7  1996 clib.h
+-rw-r--r--. 1 watada ftp  1486 Jan  7  1996 hunt.c
+-rw-r--r--. 1 watada ftp  3918 Jan  7  1996 integral.c
+-rw-r--r--. 1 watada ftp   529 Dec 11  2010 makefile
+-rw-r--r--. 1 watada ftp 11282 Jan  7  1996 mallocutil.c
+-rw-r--r--. 1 watada ftp   776 Jan  7  1996 mallocutil.h
+-rw-r--r--. 1 watada ftp  2918 Jan  7  1996 minmax.c
+-rw-r--r--. 1 watada ftp   664 Jan  7  1996 minmax.h
+-rw-r--r--. 1 watada ftp  1660 Jan  7  1996 sbess_ratio.c
+-rw-r--r--. 1 watada ftp  1604 Jan  7  1996 spline.c
+-rw-r--r--. 1 watada ftp  1146 Jan  7  1996 splint.c
+
+2. Earth model expression
+	An Earth model is expressed by a table of Earth model
+	parameters at the grid points.
+	The first line should contain
+	'earth model name'                <string>
+	'total number of grid points'.    <int>
+	The second line contains scales for the Earth model
+	parameters below.
+	Earth model parameters in the MKS unit are obtained by multiplying
+	the numbers in a column by the scale of the column.
+ 	Each line below the second line contains Earth model parameters
+	at a grid point
+	<< list of model parameters >>
+	region id of the grid point,      <int>
+	layer id of the grid point,       <int>
+	radius,                           <float>
+	density,                          <float>
+	Vpv,                              <float>
+	Vph,                              <float>
+	Vsv,                              <float>
+	Vsh,                              <float>
+	eta,                              <float>
+	Qmue,                             <float>
+	Qkappa,                           <float>
+	A,                                <float>
+	C,                                <float>
+	L,                                <float>
+	N,                                <float>
+	K.                                <float>
+	<< end of model parameters >>
+	The radius in the table should be increasing order. A boundary
+	is defined as a radius where two sets model parameters are defined
+	and Earth model parameters may be discontinuous.
+	A region is defined as a spherical or shell volume bounded either
+	by a boundary, boundaries, or the surface of the Earth.
+	The region id number should start with zero and the adjacent
+	region at a shallower depth has a larger id number.
+	Layer id increases one by one.
+	The definitions of model parameters, such as Vpv, Vph, Vsv, Vsh,
+	eta, Qmue, Qkappa, A, C, L, N and L are found
+	in Dziewonski and Anderson (1981).
+	Between grid points, except at the boundary, we assume that the
+	Earth model parameters are linearly changing with depth.
+	A line starting with '#' at the first column is recognized 
+	as a comment line.
+
+	models/prem: An example of PREM Earth model parameter table
+	models/prem_vp_rho_stratified_4km: A modified version of PREM
+	parameter table with density-stratified ocean layer 4 km deep
+	with a sound velocity vertical profile.
+	
+3. Compilation and linking programs
+	There are two makefiles;
+	programs/makefile
+	programs/lib/makefile
+
+	First, change the working directory to programs/lib.
+	and make libsmall.a by typing 
+	% make libsmall.a   (hereafter % means a prompt)
+	at the prompt.
+	After creating libsmall.a successfully, change the working
+	directory to programs and make solid_rk or test_read_solid by
+	% make solid_rk 
+	% makefile test_read_solid
+	
+4. How to use of the normal mode computation program 'solid_rk.c'
+	To run the program 'solid_rk' interactively type
+	% solid_rk 
+	then input parameters are asked after each massage from the program.
+	In this document the messages are bounded by ##.
+
+    1)  ## model filename >> ##
+	Type the filename of a table of an Earth model described
+	in section 2 of this document.
+
+    2)  ## include physical dispersion (y/n) ##
+	Type y if the effect of physical dispersion,
+	frequency dependence of Earth model parameters, is included
+	as described in Dziewonski and Anderson (1981).
+	Type n if the effect is not included.
+
+    3)  ## Cowling approximation (y/n) ##
+	Type y if the Cowling approximation, i.e., gravitational
+	potential perturbation is not included but reference
+	gravity is included.
+	Type n if the gravitational perturbation is also included.
+
+    4)  ## Top boundary condition stress free surface    1: ##
+        ##             		  rigid surface          2: ##
+        ##             		  non-reflection surface 3: ##
+	usually choose 1 here.
+
+    5)	## top boundary grid points 1-xxx -- (0 to set default xxx)>> ##
+	xxx would be the number of grid points in the model. 
+	Usually type 0 to set the largest radius as the outer boundary.
+
+    6)  ## number of regions to be divided >> ##
+	When in some region the Earth model table has coarse
+	grid points the computation of the group velocity of a mode
+	and the estimation of the accuracy of eigenfunction integration
+	are less accurate because the integrals involving the computed
+	eigenfunctions are done at the coarse grid points.
+	We can use finer grid points by choosing non-zero value here.
+
+	NOTE
+	In the course of the numerical integration of eigenfunctions,
+	the adaptive integration step size control method is used and
+	the integration step size is controlled by the program. 
+
+    7)  ## i-th region and maximum grid interval in meter >> ##
+	This message appears if we type non-zero value after message (6).
+	Tell the program which region is divided further and the
+	interval of the finer grid. For example,
+	12 1000
+	then the region 12 is grided with 1000 meter interval.
+
+    8)  ## print out ascii eigenfunctions 1: ##
+	## store binary eigenfunctions    2: ##
+	## both                           3: ##
+	## do nothing                     0: ##
+	If numerical ascii eigenfunctions are needed choose 1,
+	if numerical binary eigenfunctions are needed choose 2,
+	if both output file is needed choose 3,
+	if none of these is needed choose 0
+
+    9)  ## file name prefix for ascii eigenfunction >> ##
+	This message appears if we type 1 or 3 after message (8).
+	Type an ascii string which is used as the prefix of the file
+	name of each ascii eigenfunction file.
+	The filename of ascii eigenfunctions will be
+	'prefix string'.nsl
+	n in nsl is an integer to identify overtones and l is angular
+	order of the eigenfunctions. Note that n=0 does not necessarily
+	mean that the computed eigenfunction is a fundamental mode.
+	For example, if string is 'ascii' and the angular order
+	is 50 then filenames are
+	ascii.0s50
+	ascii.1s50
+	ascii.2s50
+	...
+	...
+
+	The contents ascii eigenfunction are
+	radius in kilometer, U, dU/dr, V, dV/dr, phi, dphi/dr and 
+	rho*(U*U+l*(l+1)*V*V)*r*r
+	or
+	radius in kilometer, U, dU/dr, V, dV/dr and
+	rho*(U*U+l*(l+1)*V*V)*r*r if the Cowling approximation is used.
+	
+	The normalization of eigenfunction is defined so that
+	when rho is normalized by kilogram/m^3
+	radius is normalized by kilometer,
+	the integral 
+	|r=surface
+	|rho*(U^2+l*(l+1)*V^2)*r^2 = 1.0
+	|r=0
+	
+   10)  ## file name of a set of eigenfunctions >> ##
+	This massage appears if we type 2 or 3 after message (8).
+	Type an ascii string which is used as the file name of a set of 
+	binary eigenfunction and the prefix of auxiliary information file
+	of the binary eigenfunction. The auxiliary file contains
+	a list of the angular order, the angular frequency and
+	the group velocity of the eigenfunctions in the binary
+	eigenfunction file.
+	For example the string is
+	'binary' then the eigenfunction filename and the information
+	filename are
+	binary
+	binary.info
+	
+	The binary format of the stored eigenfunction is defined in 
+	the eigen_mode structure or eigen_modecowl in eigen.h file,
+	depending on the use of the Cowling approximation.
+
+   11)  ## input l, starting omg, ending omg, domg, 
+           start level to stop l=-9999>> ##
+	type angular order of the target spheroidal mode, 
+	lower and upper bounding angular frequencies of 
+	searching angular frequency band,
+	searching angular frequency interval,
+	integration starting grid point.
+	For example to compute 0s2 mode, type
+	2 1e-3 3e-3 5e-4 2
+	means angular order 2, 
+	searching angular frequency band from 1e-3 rad/sec to 3e-3 rad/sec
+	searching angular frequency interval 5e-4 rad/sec
+	integration starts at grid 2.
+	The output will be,
+	<< output example >>
+	angular_order=2 omg_start=0.001000 omg_end=0.003000 domg=0.000500 start grid=2
+	omg= 0.00100000 bc_value=-1.0676e+17
+	omg= 0.00150000 bc_value=-2.3602e+16
+	found[0] l=   2 omg =  1.94314865e-03 period=3233.51 bc=  8.85240304e+08
+	I2/I1 : omg2 =  1.00003348e+00 Vc= 4.95192001e+03 Vg= 6.39129130e+03
+	omg= 0.00200000 bc_value=+1.7789e+15
+	omg= 0.00250000 bc_value=+1.1753e+16
+	omg= 0.00300000 bc_value=+1.5868e+16
+	<< output example end >>
+
+	Note when an eigenfunction is found bc_value becomes
+	very small compared to other bc_value at other frequency
+	and period in second, integration quality factor,
+	phase velocity Vc in km/sec, and group velocity Vg in km/sec
+	are printed. If the integration quality factor is close to one,
+	the eigenfunction is computed correctly.
+	The integration staring point is where the eigenfunction
+	is small enough and the small difference in the eigenfunction
+	will not result in a large difference of the eigenfunction.
+	A deeper integration starting grid is preferable but trying too
+	greedy takes longer CPU time.
+	
+    << Example >>
+	An example of input file is solid_rk.in
+	Earth model file is models/prem
+
+	% ./programs/solid_rk < solid_rk.in
+
+	An example of input file is solid_rk.in.tsunami_4km
+	Earth model file is models/prem_vp_rho_stratified_4km
+
+	% ./programs/solid_rk < solid_rk.in.tsunami_4km
+
+    << End of example >>
+	The output from solid_rk is sorted to make a dispersion table in 
+	step '6. How to compute the tsunami dispersion table'.
+
+5. How to use of the utility program for normal mode computations 
+'test_read_solid.c'
+	In this document we only explain how we can roughly
+	estimate the integration stating grid point.
+	This utility estimates the turning point of the corresponding
+	acoustic ray and the level where amplitude decays to
+	a pre-determined small value from the turning
+	point.
+	To run the program 'test_read_solid' interactively type
+	% solid_rk 
+	then input parameters are asked after each massage from the program.
+
+    1)  ## print out earth model          --->1 ##
+ 	## find ray turning point of mode --->2 ##
+	## local analysis of mode         --->3 ##
+ 	## examine modal behavior         --->4 ##
+	choose 2
+
+    2)  ## model filename >> ##
+	Type the filename of a table of an Earth model described
+	in section 2 of this document.
+
+    3)  ## angular order of mode l(to end -999) = ##
+	type angular order of the mode to be computed.
+	
+    4)  ## period of mode in sec = ##
+	type the period at which we are interested.
+
+    5)  ## tolerance level eps = ##
+	type a small value. The small number controls the level
+	where we can assume that the eigenfunctions have small numbers.
+
+	amplitude of eigenfunctions at the corresponding seismic ray
+        ------------------------------------------------------------
+	amplitude of eigenfunctions at the evanescent level
+
+	= tolerance level.
+
+	
+	<< output example >>
+	## turning level:r[xxx]=6.3466e+06, evanescent level:r[yyy]=4.7135e+06 ##
+	<< output example end >>
+
+	The turning level (grid xxx), unit in kilometer, is a grid point
+	where the corresponding seismic ray turns near this grid point.
+	At the evanescent level the amplitude ratio of an eigenfunction
+	at r=turning level and r=evanescent level becomes a small number
+	typed after message (5). We can start the integration of 
+	eigenfunctions from this grid points (grid yyy) to save
+	computation time.
+
+	Messages from (3) to (5) will be repeated to compute other cases with
+	a new angular order, period and tolerance level.
+	
+    << Example >>
+	An example of input file is test_read_solid.in
+
+	% ./programs/test_read_solid < inputs/test_read_solid.in
+
+    << End of example >>
+
+6. How to compute the tsunami dispersion table
+
+	A shell script sorts the output file of normal mode computation program
+	'solid_rk.c' and constructs a dispersion table.
+
+	<< Example >>
+
+	% run.sh inputs/solid_rk.in outputs/mode.dat
+
+	The first arugment "solid_rk.in" is the input file for solid_rk
+	The second argument "mode.dat" is the dipersion table to be created
+	from the output of solid_rk.
+	Input file is tuned for the fundamental spherloidal modes of PREM.
+
+	% run.sh inputs/solid_rk.in_tsunami_4km outputs/mode.dat_tsunami_4km
+	
+	Same as above, but the input file is tuned for tsunami modes in an ocean with
+	variable density and sound velocity vertical profiles.
+	<< End of example >>
+
+Bug
+	Do not try to compute a radial mode, i.e., l=0.
+
+References
+	Dziewonski and Anderson (1981), Preliminary Reference Earth model,
+	Physics of Earth Interior, vol. 25, pp.297-356. 
+
+	Watada and Kanamori (2010), Acoustic resonant oscillations between
+	the atmosphere and the solid Earth during the 1991 Mt. Pinatubo eruption,
+	J. Geophys. Res. Solid Earth, 115, B12319, doi:10.1029/2010JB007747 
+
+	Watada, Kusumoto, and Satake (2014), Traveltime delay and initial phase 
+	reversal of distant tsunamis coupled with the self-gravitating elastic 
+	Earth, J. Geophys. Res. Solid Earth, 119, 4287–4310, doi:10.1002/2013JB010841
+
+Author
+	Shingo Watada; ERI, University of Tokyo, Japan
+
+
