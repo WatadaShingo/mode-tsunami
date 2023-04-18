@@ -7,7 +7,7 @@ elastic Earth system. The eigenfunction includes the gravitational potential per
 The code computes the gravest 0S2 mode as well as tsunami modes.
 
 A table of modal angular order and eigenfrequency pairs are used as a tsunami dispersion relation
-to [simulate dispersive tsunami](https://github/WatadaShingo/tsunami-1d) in a constnt depth ocean.
+to [**simulate dispersive tsunami**](https://github/WatadaShingo/tsunami-1d) in a constnt depth ocean.
 
 ## References
 * Dziewonski and Anderson (1981), Preliminary Reference Earth model,
