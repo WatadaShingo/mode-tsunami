@@ -6,6 +6,9 @@ Earth's spheroidal normal modes are computed for the gravitaionally coupled
 elastic Earth system. The eigenfunction includes the gravitational potential perturbation.
 The code computes the gravest 0S2 mode as well as tsunami modes.
 
+A table of modal angular order and eigenfrequency pairs are used as a tsunami dispersion relation
+to [simulate dispersive tsunami](https://github/WatadaShingo/tsunami-1d) in a constnt depth ocean.
+
 ## References
 * Dziewonski and Anderson (1981), Preliminary Reference Earth model,
 	Physics of Earth Interior, vol. 25, pp.297-356. 
