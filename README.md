@@ -13,6 +13,9 @@ to [**simulate dispersive tsunami**](https://github/WatadaShingo/tsunami-1d) in 
 * Dziewonski and Anderson (1981), Preliminary Reference Earth model,
 	Physics of Earth Interior, vol. 25, pp.297-356. 
 
+* McDougall and Barker (2011), Getting started with TEOS‑10 and the Gibbs Seawater (GSW)
+	 Oceanographic Toolbox, 28pp., SCOR/IAPSO WG127, ISBN 978‑0‑646‑55621‑5.
+
 * Watada and Kanamori (2010), Acoustic resonant oscillations between
 	the atmosphere and the solid Earth during the 1991 Mt. Pinatubo eruption,
 	J. Geophys. Res. Solid Earth, 115, B12319, doi:10.1029/2010JB007747 
@@ -21,5 +24,5 @@ to [**simulate dispersive tsunami**](https://github/WatadaShingo/tsunami-1d) in 
 	reversal of distant tsunamis coupled with the self-gravitating elastic 
 	Earth, J. Geophys. Res. Solid Earth, 119, 4287–4310, doi:10.1002/2013JB010841
   
-* Watada, Progress and Application of the Synthesis of Trans-oceanic Tsunamis,
-  Progress in Earth and Planetary Science, submitted
+* Watada (2023), Progress and Application of the Synthesis of Trans-oceanic Tsunamis,
+	 Progress in Earth and Planetary Science, 10, 26, doi:10.1186/s40645-023-00555-1
