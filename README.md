@@ -1,7 +1,7 @@
 # mode-tsunami
 Please read readme.doc first and follow the instructions.
 
-## computation of normal modes of a spherically symmetric Earth model including an ocean layer.
+## computation of the normal modes of a spherically symmetric Earth model including an ocean layer.
 Earth's spheroidal normal modes are computed for the gravitaionally coupled
 elastic Earth system. The eigenfunction includes the gravitational potential perturbation.
 The code computes the gravest 0S2 mode as well as tsunami modes.
